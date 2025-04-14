@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"math/rand"
 
 	"github.com/google/uuid"
@@ -10,11 +11,11 @@ import (
 	"github.com/vv-sam/otus-project/server/internal/model/task"
 )
 
-func GenerateStructs() []interface{} {
+func GenerateStructs() []fmt.Stringer {
 	// количество от 5 до 15
 	c := rand.Uint32()%10 + 5
 
-	r := make([]interface{}, 0, c)
+	r := make([]fmt.Stringer, 0, c)
 
 	for range c {
 		// рандомная моделька

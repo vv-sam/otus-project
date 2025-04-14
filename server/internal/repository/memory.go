@@ -16,22 +16,17 @@ var (
 	tasks   = make([]*task.Task, 0)
 )
 
-func PassStructs(structs []interface{}) {
-	for _, str := range structs {
-		s, ok := str.(fmt.Stringer)
-		if !ok {
-			continue
-		}
-
-		switch s.(type) {
+func PassStructs(structs []fmt.Stringer) {
+	for _, s := range structs {
+		switch v := s.(type) {
 		case *agent.Info:
-			agents = append(agents, s.(*agent.Info))
+			agents = append(agents, v)
 		case *configuration.Minecraft:
-			configs = append(configs, s.(*configuration.Minecraft))
+			configs = append(configs, v)
 		case *metrics.HostMetrics:
-			metric = append(metric, s.(*metrics.HostMetrics))
+			metric = append(metric, v)
 		case *task.Task:
-			tasks = append(tasks, s.(*task.Task))
+			tasks = append(tasks, v)
 		}
 	}
 }
