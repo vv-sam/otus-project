@@ -1,6 +1,10 @@
 package task
 
-import "github.com/google/uuid"
+import (
+	"fmt"
+
+	"github.com/google/uuid"
+)
 
 const (
 	STATUS_QUEUED      = 0
@@ -18,4 +22,8 @@ type Task struct {
 
 	// Тип задачи
 	Type string `json:"type"`
+}
+
+func (t Task) String() string {
+	return fmt.Sprintf("%q, %d, %q", t.Id, t.Status, t.Type)
 }

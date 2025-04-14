@@ -1,5 +1,7 @@
 package configuration
 
+import "fmt"
+
 const (
 	CONFIGURATION_TYPE_MINECRAFT = "minecraft"
 
@@ -18,4 +20,8 @@ type Minecraft struct {
 	ViewDistance int    `json:"view_distance"`
 
 	baseConfig
+}
+
+func (c Minecraft) String() string {
+	return fmt.Sprintf("%q, %d", c.ServerName, c.MaxPlayers)
 }
