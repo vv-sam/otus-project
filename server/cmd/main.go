@@ -26,8 +26,7 @@ func main() {
 		}
 	}()
 
-	// эта функция сама завершится когда закроется канал
-	go repository.PassStructs(ch)
+	go service.ConsumeStructs(ch)
 
 	// Каждые 200мс проверяем обновления
 	go func() {

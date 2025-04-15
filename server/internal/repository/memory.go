@@ -11,7 +11,10 @@ import (
 )
 
 var (
-	m sync.RWMutex
+	am sync.Mutex
+	cm sync.Mutex
+	mm sync.Mutex
+	tm sync.Mutex
 
 	agents  = make([]*agent.Info, 0)
 	configs = make([]*configuration.Minecraft, 0)
@@ -24,56 +27,65 @@ var (
 	tasksCount   = len(tasks)
 )
 
-func PassStructs(ch chan fmt.Stringer) {
-	for s := range ch {
-		m.Lock()
-
-		switch v := s.(type) {
-		case *agent.Info:
-			agents = append(agents, v)
-		case *configuration.Minecraft:
-			configs = append(configs, v)
-		case *metrics.HostMetrics:
-			metric = append(metric, v)
-		case *task.Task:
-			tasks = append(tasks, v)
-		}
-
-		m.Unlock()
+func PassStruct(s fmt.Stringer) {
+	switch v := s.(type) {
+	case *agent.Info:
+		am.Lock()
+		agents = append(agents, v)
+		am.Unlock()
+	case *configuration.Minecraft:
+		cm.Lock()
+		configs = append(configs, v)
+		cm.Unlock()
+	case *metrics.HostMetrics:
+		mm.Lock()
+		metric = append(metric, v)
+		mm.Unlock()
+	case *task.Task:
+		tm.Lock()
+		tasks = append(tasks, v)
+		tm.Unlock()
 	}
 }
 
 func CheckUpdates() {
-	m.RLock()
-	defer m.RUnlock()
-
 	fmt.Println("Checking updates...")
+
+	am.Lock()
 	if len(agents) != agentsCount {
 		for _, a := range agents[agentsCount:] {
 			fmt.Printf("Update: %q\n", a.String())
 		}
 		agentsCount = len(agents)
 	}
+	am.Unlock()
 
+	cm.Lock()
 	if len(configs) != configsCount {
 		for _, c := range configs[configsCount:] {
 			fmt.Printf("Update: %q\n", c.String())
 		}
 		configsCount = len(configs)
 	}
+	cm.Unlock()
 
+	mm.Lock()
 	if len(metric) != metricCount {
 		for _, m := range metric[metricCount:] {
 			fmt.Printf("Update: %q\n", m.String())
 		}
 		metricCount = len(metric)
 	}
+	mm.Unlock()
 
+	tm.Lock()
 	if len(tasks) != tasksCount {
 		for _, m := range tasks[tasksCount:] {
 			fmt.Printf("Update: %q\n", m.String())
 		}
 		tasksCount = len(tasks)
 	}
+	tm.Unlock()
+
 	fmt.Println("Checking done")
 }
