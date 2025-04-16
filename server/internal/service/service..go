@@ -1,8 +1,10 @@
 package service
 
 import (
+	"context"
 	"fmt"
 	"math/rand"
+	"sync"
 
 	"github.com/google/uuid"
 	"github.com/vv-sam/otus-project/server/internal/model/agent"
@@ -28,8 +30,16 @@ func GenerateStruct(ch chan fmt.Stringer) {
 	}
 }
 
-func ConsumeStructs(ch chan fmt.Stringer) {
-	for s := range ch {
-		repository.PassStruct(s)
+func ConsumeStructs(ctx context.Context, ch chan fmt.Stringer, wg *sync.WaitGroup) {
+
+	for {
+		select {
+		case <-ctx.Done():
+			fmt.Println("Consume structs: context is done")
+			wg.Done()
+			return
+		case s := <-ch:
+			repository.PassStruct(s)
+		}
 	}
 }
