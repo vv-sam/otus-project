@@ -1,7 +1,10 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"os"
+	"os/signal"
 	"sync"
 	"time"
 
@@ -10,32 +13,45 @@ import (
 )
 
 func main() {
-	fmt.Println("Server is running...")
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer stop()
 
 	ch := make(chan fmt.Stringer)
+	defer close(ch)
 
 	// Чтобы программа не завершилась
 	wg := &sync.WaitGroup{}
-	wg.Add(2)
+	wg.Add(3)
+	defer wg.Wait()
 
 	// Каждые 60мс кладём в канал структурку
 	go func() {
 		for {
-			service.GenerateStruct(ch)
-			<-time.After(60 * time.Millisecond)
+			select {
+			case <-ctx.Done():
+				fmt.Println("Generate struct: context is done")
+				wg.Done()
+				return
+			case <-time.After(60 * time.Millisecond):
+				service.GenerateStruct(ch)
+			}
+
 		}
 	}()
 
-	go service.ConsumeStructs(ch)
+	go service.ConsumeStructs(ctx, ch, wg)
 
 	// Каждые 200мс проверяем обновления
 	go func() {
 		for {
-			repository.CheckUpdates()
-			<-time.After(200 * time.Millisecond)
+			select {
+			case <-ctx.Done():
+				fmt.Println("Check updates: context is done")
+				wg.Done()
+				return
+			case <-time.After(60 * time.Millisecond):
+				repository.CheckUpdates()
+			}
 		}
 	}()
-
-	wg.Wait()
-	close(ch)
 }
