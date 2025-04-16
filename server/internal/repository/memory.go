@@ -2,6 +2,7 @@ package repository
 
 import (
 	"fmt"
+	"sync"
 
 	"github.com/vv-sam/otus-project/server/internal/model/agent"
 	"github.com/vv-sam/otus-project/server/internal/model/configuration"
@@ -10,43 +11,81 @@ import (
 )
 
 var (
+	am sync.Mutex
+	cm sync.Mutex
+	mm sync.Mutex
+	tm sync.Mutex
+
 	agents  = make([]*agent.Info, 0)
 	configs = make([]*configuration.Minecraft, 0)
 	metric  = make([]*metrics.HostMetrics, 0)
 	tasks   = make([]*task.Task, 0)
+
+	agentsCount  = len(agents)
+	configsCount = len(configs)
+	metricCount  = len(metric)
+	tasksCount   = len(tasks)
 )
 
-func PassStructs(structs []fmt.Stringer) {
-	for _, s := range structs {
-		switch v := s.(type) {
-		case *agent.Info:
-			agents = append(agents, v)
-		case *configuration.Minecraft:
-			configs = append(configs, v)
-		case *metrics.HostMetrics:
-			metric = append(metric, v)
-		case *task.Task:
-			tasks = append(tasks, v)
-		}
+func PassStruct(s fmt.Stringer) {
+	switch v := s.(type) {
+	case *agent.Info:
+		am.Lock()
+		agents = append(agents, v)
+		am.Unlock()
+	case *configuration.Minecraft:
+		cm.Lock()
+		configs = append(configs, v)
+		cm.Unlock()
+	case *metrics.HostMetrics:
+		mm.Lock()
+		metric = append(metric, v)
+		mm.Unlock()
+	case *task.Task:
+		tm.Lock()
+		tasks = append(tasks, v)
+		tm.Unlock()
 	}
 }
 
-func PrintValues() {
-	for _, s := range agents {
-		fmt.Println(s.String())
-	}
+func CheckUpdates() {
+	fmt.Println("Checking updates...")
 
-	for _, s := range configs {
-		fmt.Println(s.String())
+	am.Lock()
+	if len(agents) != agentsCount {
+		for _, a := range agents[agentsCount:] {
+			fmt.Printf("Update: %q\n", a.String())
+		}
+		agentsCount = len(agents)
 	}
+	am.Unlock()
 
-	for _, s := range metric {
-		fmt.Println(s.String())
+	cm.Lock()
+	if len(configs) != configsCount {
+		for _, c := range configs[configsCount:] {
+			fmt.Printf("Update: %q\n", c.String())
+		}
+		configsCount = len(configs)
 	}
+	cm.Unlock()
 
-	for _, s := range tasks {
-		fmt.Println(s.String())
+	mm.Lock()
+	if len(metric) != metricCount {
+		for _, m := range metric[metricCount:] {
+			fmt.Printf("Update: %q\n", m.String())
+		}
+		metricCount = len(metric)
 	}
+	mm.Unlock()
 
-	fmt.Println("\n\n\n")
+	tm.Lock()
+	if len(tasks) != tasksCount {
+		for _, m := range tasks[tasksCount:] {
+			fmt.Printf("Update: %q\n", m.String())
+		}
+		tasksCount = len(tasks)
+	}
+	tm.Unlock()
+
+	fmt.Println("Checking done")
 }
