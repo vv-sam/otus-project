@@ -18,6 +18,8 @@ func main() {
 	wg := &sync.WaitGroup{}
 	wg.Add(2)
 
+	repository.Initialize("D:\\dev\\go\\test")
+
 	// Каждые 60мс кладём в канал структурку
 	go func() {
 		for {
