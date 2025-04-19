@@ -139,11 +139,7 @@ func loadRawData(p string) ([]byte, error) {
 	if err != nil && !os.IsNotExist(err) {
 		return nil, err
 	} else if err != nil {
-		file, err = os.Create(p)
-	}
-
-	if err != nil {
-		return nil, err
+		return []byte{}, err
 	}
 
 	return io.ReadAll(file)
