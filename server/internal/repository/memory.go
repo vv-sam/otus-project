@@ -30,10 +30,10 @@ var (
 	metric  = make([]*metrics.HostMetrics, 0)
 	tasks   = make([]*task.Task, 0)
 
-	agentsCount  = len(agents)
-	configsCount = len(configs)
-	metricCount  = len(metric)
-	tasksCount   = len(tasks)
+	agentsCount  int
+	configsCount int
+	metricCount  int
+	tasksCount   int
 )
 
 func Initialize(dir string) error {
@@ -174,6 +174,7 @@ func loadAgents() error {
 	}
 
 	err = json.Unmarshal(data, &agents)
+	agentsCount = len(agents)
 	return err
 }
 
@@ -184,6 +185,7 @@ func loadConfigs() error {
 	}
 
 	err = json.Unmarshal(data, &configs)
+	configsCount = len(configs)
 	return err
 }
 
@@ -194,6 +196,7 @@ func loadMetrics() error {
 	}
 
 	err = json.Unmarshal(data, &metric)
+	metricCount = len(metric)
 	return err
 }
 
@@ -204,6 +207,7 @@ func loadTasks() error {
 	}
 
 	err = json.Unmarshal(data, &taskPath)
+	tasksCount = len(tasks)
 	return err
 }
 
