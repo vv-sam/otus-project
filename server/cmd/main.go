@@ -24,6 +24,8 @@ func main() {
 	wg.Add(3)
 	defer wg.Wait()
 
+	repository.Initialize("D:\\dev\\go\\test")
+
 	// Каждые 60мс кладём в канал структурку
 	go func() {
 		for {
