@@ -2,11 +2,13 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/google/uuid"
 	"github.com/vv-sam/otus-project/server/internal/model/configuration"
+	"github.com/vv-sam/otus-project/server/internal/repository"
 	"github.com/vv-sam/otus-project/server/internal/services"
 )
 
@@ -43,6 +45,11 @@ func (c *Configuration) GetById(w http.ResponseWriter, r *http.Request) {
 	configuration, err := c.r.Get(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if configuration == nil {
+		http.Error(w, "configuration not found", http.StatusNotFound)
 		return
 	}
 
@@ -118,6 +125,11 @@ func (c *Configuration) Put(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := c.r.Update(uuid, &configuration); err != nil {
+		if errors.Is(err, repository.ErrNotFound) {
+			http.Error(w, "configuration not found", http.StatusNotFound)
+			return
+		}
+
 		http.Error(w, fmt.Errorf("failed to update configuration: %w", err).Error(), http.StatusInternalServerError)
 		return
 	}
@@ -139,6 +151,11 @@ func (c *Configuration) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := c.r.Delete(uuid); err != nil {
+		if errors.Is(err, repository.ErrNotFound) {
+			http.Error(w, "configuration not found", http.StatusNotFound)
+			return
+		}
+
 		http.Error(w, fmt.Errorf("failed to delete configuration: %w", err).Error(), http.StatusInternalServerError)
 		return
 	}

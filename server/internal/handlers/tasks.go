@@ -2,11 +2,13 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/google/uuid"
 	"github.com/vv-sam/otus-project/server/internal/model/task"
+	"github.com/vv-sam/otus-project/server/internal/repository"
 	"github.com/vv-sam/otus-project/server/internal/services"
 )
 
@@ -43,6 +45,11 @@ func (t *Tasks) GetById(w http.ResponseWriter, r *http.Request) {
 	task, err := t.r.Get(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if task == nil {
+		http.Error(w, "task not found", http.StatusNotFound)
 		return
 	}
 
@@ -118,6 +125,11 @@ func (t *Tasks) Put(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := t.r.Update(uuid, &task); err != nil {
+		if errors.Is(err, repository.ErrNotFound) {
+			http.Error(w, "task not found", http.StatusNotFound)
+			return
+		}
+
 		http.Error(w, fmt.Errorf("failed to update task: %w", err).Error(), http.StatusInternalServerError)
 		return
 	}
@@ -139,6 +151,11 @@ func (t *Tasks) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := t.r.Delete(uuid); err != nil {
+		if errors.Is(err, repository.ErrNotFound) {
+			http.Error(w, "task not found", http.StatusNotFound)
+			return
+		}
+
 		http.Error(w, fmt.Errorf("failed to delete task: %w", err).Error(), http.StatusInternalServerError)
 		return
 	}

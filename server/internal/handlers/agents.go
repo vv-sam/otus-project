@@ -2,11 +2,13 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/google/uuid"
 	"github.com/vv-sam/otus-project/server/internal/model/agent"
+	"github.com/vv-sam/otus-project/server/internal/repository"
 	"github.com/vv-sam/otus-project/server/internal/services"
 )
 
@@ -43,6 +45,11 @@ func (a *Agents) GetById(w http.ResponseWriter, r *http.Request) {
 	agent, err := a.r.Get(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if agent == nil {
+		http.Error(w, "agent not found", http.StatusNotFound)
 		return
 	}
 
@@ -117,6 +124,11 @@ func (a *Agents) Put(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := a.r.Update(uuid, &agent); err != nil {
+		if errors.Is(err, repository.ErrNotFound) {
+			http.Error(w, "agent not found", http.StatusNotFound)
+			return
+		}
+
 		http.Error(w, fmt.Errorf("failed to update agent: %w", err).Error(), http.StatusInternalServerError)
 		return
 	}
@@ -138,6 +150,11 @@ func (a *Agents) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := a.r.Delete(uuid); err != nil {
+		if errors.Is(err, repository.ErrNotFound) {
+			http.Error(w, "agent not found", http.StatusNotFound)
+			return
+		}
+
 		http.Error(w, fmt.Errorf("failed to delete agent: %w", err).Error(), http.StatusInternalServerError)
 		return
 	}

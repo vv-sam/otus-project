@@ -2,6 +2,7 @@ package repository
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -9,6 +10,10 @@ import (
 	"sync"
 
 	"github.com/google/uuid"
+)
+
+var (
+	ErrNotFound = errors.New("item not found")
 )
 
 type uniqueObject interface {
@@ -81,7 +86,7 @@ func (r *JsonRepository[T]) Update(id uuid.UUID, item T) error {
 	}
 
 	// А тут, я считаю, это ошибка, так как запись должна существовать для обновления данных
-	return fmt.Errorf("item not found")
+	return ErrNotFound
 }
 
 func (r *JsonRepository[T]) Delete(id uuid.UUID) error {
@@ -95,7 +100,7 @@ func (r *JsonRepository[T]) Delete(id uuid.UUID) error {
 		}
 	}
 
-	return fmt.Errorf("item not found")
+	return ErrNotFound
 }
 
 func (r *JsonRepository[T]) loadRepository() error {
