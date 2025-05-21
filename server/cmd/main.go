@@ -1,59 +1,44 @@
 package main
 
 import (
-	"context"
-	"fmt"
-	"os"
-	"os/signal"
-	"sync"
-	"time"
+	"net/http"
 
+	"github.com/vv-sam/otus-project/server/internal/handlers"
+	"github.com/vv-sam/otus-project/server/internal/model/agent"
+	"github.com/vv-sam/otus-project/server/internal/model/configuration"
+	"github.com/vv-sam/otus-project/server/internal/model/task"
 	"github.com/vv-sam/otus-project/server/internal/repository"
-	"github.com/vv-sam/otus-project/server/internal/service"
+	"github.com/vv-sam/otus-project/server/internal/services"
 )
 
 func main() {
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
-	defer stop()
+	ar := repository.NewJsonRepository[*agent.Info]("D:\\otus-data", "agents")
+	cr := repository.NewJsonRepository[*configuration.Factorio]("D:\\otus-data", "configurations")
+	tr := repository.NewJsonRepository[*task.Task]("D:\\otus-data", "tasks")
 
-	ch := make(chan fmt.Stringer)
-	defer close(ch)
+	ah := handlers.NewAgents(ar, &services.Validator{})
+	ch := handlers.NewConfiguration(cr, &services.Validator{})
+	th := handlers.NewTasks(tr, &services.Validator{})
 
-	// Чтобы программа не завершилась
-	wg := &sync.WaitGroup{}
-	wg.Add(3)
-	defer wg.Wait()
+	mux := http.NewServeMux()
 
-	repository.Initialize("D:\\dev\\go\\test")
+	mux.HandleFunc("GET /api/agents", ah.GetAll)
+	mux.HandleFunc("GET /api/agents/{id}", ah.GetById)
+	mux.HandleFunc("POST /api/agents", ah.Post)
+	mux.HandleFunc("PUT /api/agents/{id}", ah.Put)
+	mux.HandleFunc("DELETE /api/agents/{id}", ah.Delete)
 
-	// Каждые 60мс кладём в канал структурку
-	go func() {
-		for {
-			select {
-			case <-ctx.Done():
-				fmt.Println("Generate struct: context is done")
-				wg.Done()
-				return
-			case <-time.After(60 * time.Millisecond):
-				service.GenerateStruct(ch)
-			}
+	mux.HandleFunc("GET /api/configurations", ch.GetAll)
+	mux.HandleFunc("GET /api/configurations/{id}", ch.GetById)
+	mux.HandleFunc("POST /api/configurations", ch.Post)
+	mux.HandleFunc("PUT /api/configurations/{id}", ch.Put)
+	mux.HandleFunc("DELETE /api/configurations/{id}", ch.Delete)
 
-		}
-	}()
+	mux.HandleFunc("GET /api/tasks", th.GetAll)
+	mux.HandleFunc("GET /api/tasks/{id}", th.GetById)
+	mux.HandleFunc("POST /api/tasks", th.Post)
+	mux.HandleFunc("PUT /api/tasks/{id}", th.Put)
+	mux.HandleFunc("DELETE /api/tasks/{id}", th.Delete)
 
-	go service.ConsumeStructs(ctx, ch, wg)
-
-	// Каждые 200мс проверяем обновления
-	go func() {
-		for {
-			select {
-			case <-ctx.Done():
-				fmt.Println("Check updates: context is done")
-				wg.Done()
-				return
-			case <-time.After(60 * time.Millisecond):
-				repository.CheckUpdates()
-			}
-		}
-	}()
+	http.ListenAndServe(":8080", mux)
 }

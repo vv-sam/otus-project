@@ -27,3 +27,19 @@ type Task struct {
 func (t Task) String() string {
 	return fmt.Sprintf("%q, %d, %q", t.Id, t.Status, t.Type)
 }
+
+func (t Task) GetId() uuid.UUID {
+	return t.Id
+}
+
+func (t Task) Validate() error {
+	if t.Id == uuid.Nil {
+		return fmt.Errorf("id is required")
+	}
+
+	if t.Type == "" {
+		return fmt.Errorf("type is required")
+	}
+
+	return nil
+}
