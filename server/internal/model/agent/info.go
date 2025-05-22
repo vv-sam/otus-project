@@ -19,3 +19,15 @@ type Info struct {
 func (i Info) String() string {
 	return fmt.Sprintf("%q, %d", i.AgentId.String(), i.Status)
 }
+
+func (i Info) GetId() uuid.UUID {
+	return i.AgentId
+}
+
+func (i Info) Validate() error {
+	if i.AgentId == uuid.Nil {
+		return fmt.Errorf("agent_id is required")
+	}
+
+	return nil
+}
