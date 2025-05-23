@@ -105,7 +105,8 @@ func (t *Tasks) GetAll(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Param task body task.Task true "Task"
-// @Success 201 {object} task.Task
+// @Security BearerAuth
+// @Success 201
 // @Failure 400 {object} error
 // @Failure 500 {object} error
 // @Router /api/tasks [post]
@@ -136,7 +137,8 @@ func (t *Tasks) Post(w http.ResponseWriter, r *http.Request) {
 // @Produce json
 // @Param id path string true "Task ID"
 // @Param task body task.Task true "Task"
-// @Success 200 {object} task.Task
+// @Security BearerAuth
+// @Success 200
 // @Failure 400 {object} error
 // @Failure 404 {object} error
 // @Failure 500 {object} error
@@ -184,7 +186,8 @@ func (t *Tasks) Put(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Param id path string true "Task ID"
-// @Success 200 {object} task.Task
+// @Security BearerAuth
+// @Success 200
 // @Failure 400 {object} error
 // @Failure 404 {object} error
 // @Failure 500 {object} error

@@ -104,7 +104,8 @@ func (a *Agents) GetAll(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Param agent body agent.Info true "Agent"
-// @Success 201 {object} agent.Info
+// @Security BearerAuth
+// @Success 201
 // @Failure 400 {object} error
 // @Failure 500 {object} error
 // @Router /api/agents [post]
@@ -135,7 +136,8 @@ func (a *Agents) Post(w http.ResponseWriter, r *http.Request) {
 // @Produce json
 // @Param id path string true "Agent ID"
 // @Param agent body agent.Info true "Agent"
-// @Success 200 {object} agent.Info
+// @Security BearerAuth
+// @Success 200
 // @Failure 400 {object} error
 // @Failure 404 {object} error
 // @Failure 500 {object} error
@@ -183,7 +185,8 @@ func (a *Agents) Put(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Param id path string true "Agent ID"
-// @Success 200 {object} agent.Info
+// @Security BearerAuth
+// @Success 200
 // @Failure 400 {object} error
 // @Failure 500 {object} error
 // @Router /api/agents/{id} [delete]

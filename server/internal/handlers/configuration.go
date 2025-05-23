@@ -105,7 +105,8 @@ func (c *Configuration) GetAll(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Param configuration body configuration.Factorio true "Configuration"
-// @Success 201 {object} configuration.Factorio
+// @Security BearerAuth
+// @Success 201
 // @Failure 400 {object} error
 // @Failure 500 {object} error
 // @Router /api/configurations [post]
@@ -136,7 +137,8 @@ func (c *Configuration) Post(w http.ResponseWriter, r *http.Request) {
 // @Produce json
 // @Param id path string true "Configuration ID"
 // @Param configuration body configuration.Factorio true "Configuration"
-// @Success 200 {object} configuration.Factorio
+// @Security BearerAuth
+// @Success 200
 // @Failure 400 {object} error
 // @Failure 404 {object} error
 // @Failure 500 {object} error
@@ -184,7 +186,8 @@ func (c *Configuration) Put(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Param id path string true "Configuration ID"
-// @Success 200 {object} configuration.Factorio
+// @Security BearerAuth
+// @Success 200
 // @Failure 400 {object} error
 // @Failure 404 {object} error
 // @Failure 500 {object} error

@@ -243,6 +243,18 @@ definitions:
       tick_tolerance_when_member_arrives:
         type: integer
     type: object
+  handlers.loginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  handlers.loginResponse:
+    properties:
+      token:
+        type: string
+    type: object
   metrics.HostMetrics:
     properties:
       cpu_usage:
@@ -307,14 +319,14 @@ paths:
       responses:
         "201":
           description: Created
-          schema:
-            $ref: '#/definitions/agent.Info'
         "400":
           description: Bad Request
           schema: {}
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - BearerAuth: []
       summary: Create a new agent
       tags:
       - agents
@@ -334,14 +346,14 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            $ref: '#/definitions/agent.Info'
         "400":
           description: Bad Request
           schema: {}
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - BearerAuth: []
       summary: Delete an agent
       tags:
       - agents
@@ -395,8 +407,6 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            $ref: '#/definitions/agent.Info'
         "400":
           description: Bad Request
           schema: {}
@@ -406,9 +416,39 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - BearerAuth: []
       summary: Update an agent
       tags:
       - agents
+  /api/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login and get a token
+      parameters:
+      - description: Login request
+        in: body
+        name: loginRequest
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.loginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.loginResponse'
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Login
+      tags:
+      - auth
   /api/configurations:
     get:
       consumes:
@@ -445,14 +485,14 @@ paths:
       responses:
         "201":
           description: Created
-          schema:
-            $ref: '#/definitions/configuration.Factorio'
         "400":
           description: Bad Request
           schema: {}
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - BearerAuth: []
       summary: Create a new configuration
       tags:
       - configurations
@@ -472,8 +512,6 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            $ref: '#/definitions/configuration.Factorio'
         "400":
           description: Bad Request
           schema: {}
@@ -483,6 +521,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - BearerAuth: []
       summary: Delete a configuration
       tags:
       - configurations
@@ -536,8 +576,6 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            $ref: '#/definitions/configuration.Factorio'
         "400":
           description: Bad Request
           schema: {}
@@ -547,6 +585,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - BearerAuth: []
       summary: Update a configuration
       tags:
       - configurations
@@ -586,14 +626,14 @@ paths:
       responses:
         "201":
           description: Created
-          schema:
-            $ref: '#/definitions/task.Task'
         "400":
           description: Bad Request
           schema: {}
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - BearerAuth: []
       summary: Create a new task
       tags:
       - tasks
@@ -613,8 +653,6 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            $ref: '#/definitions/task.Task'
         "400":
           description: Bad Request
           schema: {}
@@ -624,6 +662,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - BearerAuth: []
       summary: Delete a task
       tags:
       - tasks
@@ -677,8 +717,6 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            $ref: '#/definitions/task.Task'
         "400":
           description: Bad Request
           schema: {}
@@ -688,7 +726,14 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - BearerAuth: []
       summary: Update a task
       tags:
       - tasks
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
