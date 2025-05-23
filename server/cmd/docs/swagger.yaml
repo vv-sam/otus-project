@@ -1,0 +1,739 @@
+definitions:
+  agent.Info:
+    properties:
+      agent_id:
+        type: string
+      metrics:
+        $ref: '#/definitions/metrics.HostMetrics'
+      status:
+        type: integer
+      tasks:
+        items:
+          $ref: '#/definitions/task.Task'
+        type: array
+    type: object
+  configuration.Factorio:
+    properties:
+      agentId:
+        description: ID агента для запуска задачи
+        type: string
+      id:
+        description: уникальный ID конфигурации
+        type: string
+      map_gen_settings:
+        $ref: '#/definitions/configuration.MapGenSettings'
+      map_settings:
+        $ref: '#/definitions/configuration.MapSettings'
+      port:
+        description: Порт сервера
+        type: integer
+      server_settings:
+        $ref: '#/definitions/configuration.ServerSetting'
+      type:
+        description: Тип конфигурации
+        type: string
+    type: object
+  configuration.MapGenSettings:
+    properties:
+      autoplace_controls:
+        additionalProperties:
+          $ref: '#/definitions/configuration.resource'
+        type: object
+      cliff_settings:
+        $ref: '#/definitions/configuration.cliff'
+      height:
+        type: integer
+      peaceful_mode:
+        type: boolean
+      seed:
+        type: integer
+      starting_area:
+        type: integer
+      width:
+        type: integer
+    type: object
+  configuration.MapSettings:
+    properties:
+      difficulty_settings:
+        $ref: '#/definitions/configuration.difficulty'
+      enemy_evolution:
+        $ref: '#/definitions/configuration.evolution'
+      enemy_expansion:
+        $ref: '#/definitions/configuration.expansion'
+      pollution:
+        $ref: '#/definitions/configuration.pollution'
+      unit_group:
+        $ref: '#/definitions/configuration.unitGroup'
+    type: object
+  configuration.ServerSetting:
+    properties:
+      afk_autokick_interval:
+        type: integer
+      allow_commands:
+        type: string
+      auto_pause:
+        type: boolean
+      auto_pause_when_players_connect:
+        type: boolean
+      autosave_interval:
+        type: integer
+      autosave_only_on_server:
+        type: boolean
+      autosave_slots:
+        type: integer
+      description:
+        type: string
+      ignore_player_limit_for_returning_players:
+        type: boolean
+      max_heartbeats_per_second:
+        type: integer
+      max_players:
+        type: integer
+      max_upload_in_kilobytes_per_second:
+        type: integer
+      max_upload_slots:
+        type: integer
+      maximum_segment_size:
+        type: integer
+      maximum_segment_size_peer_count:
+        type: integer
+      minimum_latency_in_ticks:
+        type: integer
+      minimum_segment_size:
+        type: integer
+      minimum_segment_size_peer_count:
+        type: integer
+      name:
+        type: string
+      non_blocking_saving:
+        type: boolean
+      only_admins_can_pause_the_game:
+        type: boolean
+      require_user_verification:
+        type: boolean
+      tags:
+        items:
+          type: string
+        type: array
+      token:
+        type: string
+      username:
+        type: string
+    type: object
+  configuration.cliff:
+    properties:
+      cliff_elevation_0:
+        type: integer
+      cliff_elevation_interval:
+        type: integer
+      name:
+        type: string
+      richness:
+        type: integer
+    type: object
+  configuration.difficulty:
+    properties:
+      spoil_time_modifier:
+        type: number
+      technology_price_multiplier:
+        type: number
+    type: object
+  configuration.evolution:
+    properties:
+      destroy_factor:
+        type: number
+      enabled:
+        type: boolean
+      pollution_factor:
+        type: number
+      time_factor:
+        type: number
+    type: object
+  configuration.expansion:
+    properties:
+      building_coefficient:
+        type: number
+      enabled:
+        type: boolean
+      enemy_building_influence_radius:
+        type: integer
+      friendly_base_influence_radius:
+        type: integer
+      max_colliding_tiles_coefficient:
+        type: number
+      max_expansion_cooldown:
+        type: integer
+      max_expansion_distance:
+        type: integer
+      min_expansion_cooldown:
+        type: integer
+      neighbouring_base_chunk_coefficient:
+        type: number
+      neighbouring_chunk_coefficient:
+        type: number
+      other_base_coefficient:
+        type: number
+      settler_group_max_size:
+        type: integer
+      settler_group_min_size:
+        type: integer
+    type: object
+  configuration.pollution:
+    properties:
+      ageing:
+        type: integer
+      diffusion_ratio:
+        type: number
+      enabled:
+        type: boolean
+      enemy_attack_pollution_consumption_modifier:
+        type: integer
+      expected_max_per_chunk:
+        type: integer
+      max_pollution_to_restore_trees:
+        type: integer
+      min_pollution_to_damage_trees:
+        type: integer
+      min_to_diffuse:
+        type: integer
+      min_to_show_per_chunk:
+        type: integer
+      pollution_per_tree_damage:
+        type: integer
+      pollution_restored_per_tree_damage:
+        type: integer
+      pollution_with_max_forest_damage:
+        type: integer
+    type: object
+  configuration.resource:
+    properties:
+      frequency:
+        type: number
+      richness:
+        type: number
+      size:
+        type: number
+    type: object
+  configuration.unitGroup:
+    properties:
+      max_gathering_unit_groups:
+        type: integer
+      max_group_gathering_time:
+        type: integer
+      max_group_member_fallback_factor:
+        type: integer
+      max_group_radius:
+        type: number
+      max_group_slowdown_factor:
+        type: number
+      max_member_slowdown_when_ahead:
+        type: number
+      max_member_speedup_when_behind:
+        type: number
+      max_unit_group_size:
+        type: integer
+      max_wait_time_for_late_members:
+        type: integer
+      member_disown_distance:
+        type: integer
+      min_group_gathering_time:
+        type: integer
+      min_group_radius:
+        type: number
+      tick_tolerance_when_member_arrives:
+        type: integer
+    type: object
+  handlers.loginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  handlers.loginResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  metrics.HostMetrics:
+    properties:
+      cpu_usage:
+        type: number
+      ram_available:
+        type: integer
+      ram_total:
+        type: integer
+    type: object
+  task.Task:
+    properties:
+      id:
+        description: ID задачи
+        type: string
+      status:
+        description: Статус задачи
+        type: integer
+      type:
+        description: Тип задачи
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a simple API for the Otus-Project
+  title: Otus-Project
+  version: "1.0"
+paths:
+  /api/agents:
+    get:
+      consumes:
+      - application/json
+      description: Get all agents
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/agent.Info'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get all agents
+      tags:
+      - agents
+    post:
+      consumes:
+      - application/json
+      description: Create a new agent
+      parameters:
+      - description: Agent
+        in: body
+        name: agent
+        required: true
+        schema:
+          $ref: '#/definitions/agent.Info'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Create a new agent
+      tags:
+      - agents
+  /api/agents/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an agent
+      parameters:
+      - description: Agent ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Delete an agent
+      tags:
+      - agents
+    get:
+      consumes:
+      - application/json
+      description: Get agent by id
+      parameters:
+      - description: Agent ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/agent.Info'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get agent by id
+      tags:
+      - agents
+    put:
+      consumes:
+      - application/json
+      description: Update an agent
+      parameters:
+      - description: Agent ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Agent
+        in: body
+        name: agent
+        required: true
+        schema:
+          $ref: '#/definitions/agent.Info'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Update an agent
+      tags:
+      - agents
+  /api/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login and get a token
+      parameters:
+      - description: Login request
+        in: body
+        name: loginRequest
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.loginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.loginResponse'
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Login
+      tags:
+      - auth
+  /api/configurations:
+    get:
+      consumes:
+      - application/json
+      description: Get all configurations
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/configuration.Factorio'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get all configurations
+      tags:
+      - configurations
+    post:
+      consumes:
+      - application/json
+      description: Create a new configuration
+      parameters:
+      - description: Configuration
+        in: body
+        name: configuration
+        required: true
+        schema:
+          $ref: '#/definitions/configuration.Factorio'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Create a new configuration
+      tags:
+      - configurations
+  /api/configurations/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a configuration
+      parameters:
+      - description: Configuration ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Delete a configuration
+      tags:
+      - configurations
+    get:
+      consumes:
+      - application/json
+      description: Get configuration by id
+      parameters:
+      - description: Configuration ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/configuration.Factorio'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get configuration by id
+      tags:
+      - configurations
+    put:
+      consumes:
+      - application/json
+      description: Update a configuration
+      parameters:
+      - description: Configuration ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Configuration
+        in: body
+        name: configuration
+        required: true
+        schema:
+          $ref: '#/definitions/configuration.Factorio'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Update a configuration
+      tags:
+      - configurations
+  /api/tasks:
+    get:
+      consumes:
+      - application/json
+      description: Get all tasks
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/task.Task'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get all tasks
+      tags:
+      - tasks
+    post:
+      consumes:
+      - application/json
+      description: Create a new task
+      parameters:
+      - description: Task
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/task.Task'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Create a new task
+      tags:
+      - tasks
+  /api/tasks/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a task
+      parameters:
+      - description: Task ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Delete a task
+      tags:
+      - tasks
+    get:
+      consumes:
+      - application/json
+      description: Get task by id
+      parameters:
+      - description: Task ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/task.Task'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get task by id
+      tags:
+      - tasks
+    put:
+      consumes:
+      - application/json
+      description: Update a task
+      parameters:
+      - description: Task ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Task
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/task.Task'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Update a task
+      tags:
+      - tasks
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

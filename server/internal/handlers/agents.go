@@ -29,6 +29,17 @@ func NewAgents(r agentRepository, v *services.Validator) *Agents {
 	return &Agents{r: r, v: v}
 }
 
+// @Summary Get agent by id
+// @Description Get agent by id
+// @Tags agents
+// @Accept json
+// @Produce json
+// @Param id path string true "Agent ID"
+// @Success 200 {object} agent.Info
+// @Failure 400 {object} error
+// @Failure 404 {object} error
+// @Failure 500 {object} error
+// @Router /api/agents/{id} [get]
 func (a *Agents) GetById(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	if id == "" {
@@ -62,6 +73,14 @@ func (a *Agents) GetById(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// @Summary Get all agents
+// @Description Get all agents
+// @Tags agents
+// @Accept json
+// @Produce json
+// @Success 200 {array} agent.Info
+// @Failure 500 {object} error
+// @Router /api/agents [get]
 func (a *Agents) GetAll(w http.ResponseWriter, r *http.Request) {
 	agents, err := a.r.GetAll()
 	if err != nil {
@@ -79,6 +98,17 @@ func (a *Agents) GetAll(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// @Summary Create a new agent
+// @Description Create a new agent
+// @Tags agents
+// @Accept json
+// @Produce json
+// @Param agent body agent.Info true "Agent"
+// @Security BearerAuth
+// @Success 201
+// @Failure 400 {object} error
+// @Failure 500 {object} error
+// @Router /api/agents [post]
 func (a *Agents) Post(w http.ResponseWriter, r *http.Request) {
 	var agent agent.Info
 	if err := json.NewDecoder(r.Body).Decode(&agent); err != nil {
@@ -99,6 +129,19 @@ func (a *Agents) Post(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
+// @Summary Update an agent
+// @Description Update an agent
+// @Tags agents
+// @Accept json
+// @Produce json
+// @Param id path string true "Agent ID"
+// @Param agent body agent.Info true "Agent"
+// @Security BearerAuth
+// @Success 200
+// @Failure 400 {object} error
+// @Failure 404 {object} error
+// @Failure 500 {object} error
+// @Router /api/agents/{id} [put]
 func (a *Agents) Put(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	if id == "" {
@@ -136,6 +179,17 @@ func (a *Agents) Put(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+// @Summary Delete an agent
+// @Description Delete an agent
+// @Tags agents
+// @Accept json
+// @Produce json
+// @Param id path string true "Agent ID"
+// @Security BearerAuth
+// @Success 200
+// @Failure 400 {object} error
+// @Failure 500 {object} error
+// @Router /api/agents/{id} [delete]
 func (a *Agents) Delete(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	if id == "" {

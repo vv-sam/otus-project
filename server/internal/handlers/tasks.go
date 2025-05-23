@@ -29,6 +29,17 @@ func NewTasks(r tasksRepository, v *services.Validator) *Tasks {
 	return &Tasks{r: r, v: v}
 }
 
+// @Summary Get task by id
+// @Description Get task by id
+// @Tags tasks
+// @Accept json
+// @Produce json
+// @Param id path string true "Task ID"
+// @Success 200 {object} task.Task
+// @Failure 400 {object} error
+// @Failure 404 {object} error
+// @Failure 500 {object} error
+// @Router /api/tasks/{id} [get]
 func (t *Tasks) GetById(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	if id == "" {
@@ -63,6 +74,14 @@ func (t *Tasks) GetById(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// @Summary Get all tasks
+// @Description Get all tasks
+// @Tags tasks
+// @Accept json
+// @Produce json
+// @Success 200 {array} task.Task
+// @Failure 500 {object} error
+// @Router /api/tasks [get]
 func (t *Tasks) GetAll(w http.ResponseWriter, r *http.Request) {
 	tasks, err := t.r.GetAll()
 	if err != nil {
@@ -80,6 +99,17 @@ func (t *Tasks) GetAll(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// @Summary Create a new task
+// @Description Create a new task
+// @Tags tasks
+// @Accept json
+// @Produce json
+// @Param task body task.Task true "Task"
+// @Security BearerAuth
+// @Success 201
+// @Failure 400 {object} error
+// @Failure 500 {object} error
+// @Router /api/tasks [post]
 func (t *Tasks) Post(w http.ResponseWriter, r *http.Request) {
 	var task task.Task
 	if err := json.NewDecoder(r.Body).Decode(&task); err != nil {
@@ -100,6 +130,19 @@ func (t *Tasks) Post(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
+// @Summary Update a task
+// @Description Update a task
+// @Tags tasks
+// @Accept json
+// @Produce json
+// @Param id path string true "Task ID"
+// @Param task body task.Task true "Task"
+// @Security BearerAuth
+// @Success 200
+// @Failure 400 {object} error
+// @Failure 404 {object} error
+// @Failure 500 {object} error
+// @Router /api/tasks/{id} [put]
 func (t *Tasks) Put(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	if id == "" {
@@ -137,6 +180,18 @@ func (t *Tasks) Put(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+// @Summary Delete a task
+// @Description Delete a task
+// @Tags tasks
+// @Accept json
+// @Produce json
+// @Param id path string true "Task ID"
+// @Security BearerAuth
+// @Success 200
+// @Failure 400 {object} error
+// @Failure 404 {object} error
+// @Failure 500 {object} error
+// @Router /api/tasks/{id} [delete]
 func (t *Tasks) Delete(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	if id == "" {
