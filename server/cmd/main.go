@@ -3,6 +3,8 @@ package main
 import (
 	"net/http"
 
+	httpSwagger "github.com/swaggo/http-swagger/v2"
+	_ "github.com/vv-sam/otus-project/server/cmd/docs"
 	"github.com/vv-sam/otus-project/server/internal/handlers"
 	"github.com/vv-sam/otus-project/server/internal/model/agent"
 	"github.com/vv-sam/otus-project/server/internal/model/configuration"
@@ -11,6 +13,10 @@ import (
 	"github.com/vv-sam/otus-project/server/internal/services"
 )
 
+//	@title			Otus-Project
+//	@version		1.0
+//	@description	This is a simple API for the Otus-Project
+//	@host			localhost:8080
 func main() {
 	ar := repository.NewJsonRepository[*agent.Info]("D:\\otus-data", "agents")
 	cr := repository.NewJsonRepository[*configuration.Factorio]("D:\\otus-data", "configurations")
@@ -21,6 +27,10 @@ func main() {
 	th := handlers.NewTasks(tr, &services.Validator{})
 
 	mux := http.NewServeMux()
+
+	mux.HandleFunc("GET /swagger/", httpSwagger.Handler(
+		httpSwagger.URL("http://localhost:8080/swagger/doc.json"),
+	))
 
 	mux.HandleFunc("GET /api/agents", ah.GetAll)
 	mux.HandleFunc("GET /api/agents/{id}", ah.GetById)

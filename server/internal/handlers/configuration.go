@@ -29,6 +29,17 @@ func NewConfiguration(r configurationRepository, v *services.Validator) *Configu
 	return &Configuration{r: r, v: v}
 }
 
+// @Summary Get configuration by id
+// @Description Get configuration by id
+// @Tags configurations
+// @Accept json
+// @Produce json
+// @Param id path string true "Configuration ID"
+// @Success 200 {object} configuration.Factorio
+// @Failure 400 {object} error
+// @Failure 404 {object} error
+// @Failure 500 {object} error
+// @Router /api/configurations/{id} [get]
 func (c *Configuration) GetById(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	if id == "" {
@@ -63,6 +74,14 @@ func (c *Configuration) GetById(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// @Summary Get all configurations
+// @Description Get all configurations
+// @Tags configurations
+// @Accept json
+// @Produce json
+// @Success 200 {array} configuration.Factorio
+// @Failure 500 {object} error
+// @Router /api/configurations [get]
 func (c *Configuration) GetAll(w http.ResponseWriter, r *http.Request) {
 	configuration, err := c.r.GetAll()
 	if err != nil {
@@ -80,6 +99,16 @@ func (c *Configuration) GetAll(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// @Summary Create a new configuration
+// @Description Create a new configuration
+// @Tags configurations
+// @Accept json
+// @Produce json
+// @Param configuration body configuration.Factorio true "Configuration"
+// @Success 201 {object} configuration.Factorio
+// @Failure 400 {object} error
+// @Failure 500 {object} error
+// @Router /api/configurations [post]
 func (c *Configuration) Post(w http.ResponseWriter, r *http.Request) {
 	var configuration configuration.Factorio
 	if err := json.NewDecoder(r.Body).Decode(&configuration); err != nil {
@@ -100,6 +129,18 @@ func (c *Configuration) Post(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
+// @Summary Update a configuration
+// @Description Update a configuration
+// @Tags configurations
+// @Accept json
+// @Produce json
+// @Param id path string true "Configuration ID"
+// @Param configuration body configuration.Factorio true "Configuration"
+// @Success 200 {object} configuration.Factorio
+// @Failure 400 {object} error
+// @Failure 404 {object} error
+// @Failure 500 {object} error
+// @Router /api/configurations/{id} [put]
 func (c *Configuration) Put(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	if id == "" {
@@ -137,6 +178,17 @@ func (c *Configuration) Put(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+// @Summary Delete a configuration
+// @Description Delete a configuration
+// @Tags configurations
+// @Accept json
+// @Produce json
+// @Param id path string true "Configuration ID"
+// @Success 200 {object} configuration.Factorio
+// @Failure 400 {object} error
+// @Failure 404 {object} error
+// @Failure 500 {object} error
+// @Router /api/configurations/{id} [delete]
 func (c *Configuration) Delete(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	if id == "" {
