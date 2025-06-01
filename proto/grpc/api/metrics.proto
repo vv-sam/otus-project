@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package api;
+
+option go_package = "github.com/vv-sam/otus-project/proto/grpc/api";
+
+message HostMetrics {
+  float cpu_usage = 1;
+  uint64 ram_available = 2;
+  uint64 ram_total = 3;
+}
