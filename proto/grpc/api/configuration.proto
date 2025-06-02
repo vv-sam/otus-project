@@ -1,0 +1,206 @@
+syntax = "proto3";
+
+package api;
+
+option go_package = "github.com/vv-sam/otus-project/proto/grpc/api";
+
+enum ConfigurationType {
+  CONFIGURATION_TYPE_UNSPECIFIED = 0;
+  CONFIGURATION_TYPE_FACTORIO = 1;
+  CONFIGURATION_TYPE_MINECRAFT = 2;
+}
+
+enum MinecraftGamemode {
+  MINECRAFT_GAMEMODE_UNSPECIFIED = 0;
+  MINECRAFT_GAMEMODE_SURVIVAL = 1;
+  MINECRAFT_GAMEMODE_CREATIVE = 2;
+  MINECRAFT_GAMEMODE_ADVENTURE = 3;
+  MINECRAFT_GAMEMODE_SPECTATOR = 4;
+}
+
+message BaseConfig {
+  string id = 1;
+  string agent_id = 2;
+  uint32 port = 3;
+  ConfigurationType type = 4;
+}
+
+message FactorioServerSettings {
+  string name = 1;
+  string description = 2;
+  repeated string tags = 3;
+  int32 max_players = 4;
+  string username = 5;
+  string token = 6;
+  bool require_user_verification = 7;
+  int32 max_upload_in_kilobytes_per_second = 8;
+  int32 max_upload_slots = 9;
+  int32 minimum_latency_in_ticks = 10;
+  int32 max_heartbeats_per_second = 11;
+  bool ignore_player_limit_for_returning_players = 12;
+  string allow_commands = 13;
+  int32 autosave_interval = 14;
+  int32 autosave_slots = 15;
+  int32 afk_autokick_interval = 16;
+  bool auto_pause = 17;
+  bool auto_pause_when_players_connect = 18;
+  bool only_admins_can_pause_the_game = 19;
+  bool autosave_only_on_server = 20;
+  bool non_blocking_saving = 21;
+  int32 minimum_segment_size = 22;
+  int32 minimum_segment_size_peer_count = 23;
+  int32 maximum_segment_size = 24;
+  int32 maximum_segment_size_peer_count = 25;
+}
+
+message FactorioDifficultySettings {
+  float technology_price_multiplier = 1;
+  float spoil_time_modifier = 2;
+}
+
+message FactorioPollutionSettings {
+  bool enabled = 1;
+  double diffusion_ratio = 2;
+  int32 min_to_diffuse = 3;
+  int32 ageing = 4;
+  int32 expected_max_per_chunk = 5;
+  int32 min_to_show_per_chunk = 6;
+  int32 min_pollution_to_damage_trees = 7;
+  int32 pollution_with_max_forest_damage = 8;
+  int32 pollution_per_tree_damage = 9;
+  int32 pollution_restored_per_tree_damage = 10;
+  int32 max_pollution_to_restore_trees = 11;
+  int32 enemy_attack_pollution_consumption_modifier = 12;
+}
+
+message FactorioEnemyEvolution {
+  bool enabled = 1;
+  double time_factor = 2;
+  double destroy_factor = 3;
+  double pollution_factor = 4;
+}
+
+message FactorioEnemyExpansion {
+  bool enabled = 1;
+  int32 max_expansion_distance = 2;
+  int32 friendly_base_influence_radius = 3;
+  int32 enemy_building_influence_radius = 4;
+  double building_coefficient = 5;
+  double other_base_coefficient = 6;
+  double neighbouring_chunk_coefficient = 7;
+  double neighbouring_base_chunk_coefficient = 8;
+  double max_colliding_tiles_coefficient = 9;
+  int32 settler_group_min_size = 10;
+  int32 settler_group_max_size = 11;
+  int32 min_expansion_cooldown = 12;
+  int32 max_expansion_cooldown = 13;
+}
+
+message FactorioUnitGroup {
+  int32 min_group_gathering_time = 1;
+  int32 max_group_gathering_time = 2;
+  int32 max_wait_time_for_late_members = 3;
+  double max_group_radius = 4;
+  double min_group_radius = 5;
+  double max_member_speedup_when_behind = 6;
+  double max_member_slowdown_when_ahead = 7;
+  double max_group_slowdown_factor = 8;
+  int32 max_group_member_fallback_factor = 9;
+  int32 member_disown_distance = 10;
+  int32 tick_tolerance_when_member_arrives = 11;
+  int32 max_gathering_unit_groups = 12;
+  int32 max_unit_group_size = 13;
+}
+
+message FactorioMapSettings {
+  FactorioDifficultySettings difficulty_settings = 1;
+  FactorioPollutionSettings pollution = 2;
+  FactorioEnemyEvolution enemy_evolution = 3;
+  FactorioEnemyExpansion enemy_expansion = 4;
+  FactorioUnitGroup unit_group = 5;
+}
+
+message FactorioResourceSettings {
+  float frequency = 1;
+  float size = 2;
+  float richness = 3;
+}
+
+message FactorioCliffSettings {
+  string name = 1;
+  int32 cliff_elevation_0 = 2;
+  int32 cliff_elevation_interval = 3;
+  int32 richness = 4;
+}
+
+message FactorioMapGenSettings {
+  int32 width = 1;
+  int32 height = 2;
+  int32 starting_area = 3;
+  bool peaceful_mode = 4;
+  map<string, FactorioResourceSettings> autoplace_controls = 5;
+  FactorioCliffSettings cliff_settings = 6;
+  int32 seed = 7;
+}
+
+message FactorioConfig {
+  BaseConfig base = 1;
+  FactorioServerSettings server = 2;
+  FactorioMapSettings map = 3;
+  FactorioMapGenSettings map_gen = 4;
+}
+
+message MinecraftConfig {
+  BaseConfig base = 1;
+  string seed = 2;
+  uint32 rcon_port = 3;
+  MinecraftGamemode gamemode = 4;
+  string server_name = 5;
+  uint32 max_players = 6;
+  int32 view_distance = 7;
+}
+
+service ConfigurationService {
+  rpc GetById(GetConfigByIdRequest) returns (GetConfigByIdResponse);
+  rpc GetAll(GetAllConfigurationsRequest) returns (GetAllConfigurationsResponse);
+  rpc Post(PostConfigurationRequest) returns (PostConfigurationResponse);
+  rpc Put(PutConfigurationRequest) returns (PutConfigurationResponse);
+  rpc Delete(DeleteConfigurationRequest) returns (DeleteConfigurationResponse);
+}
+
+message GetConfigByIdRequest {
+  string id = 1;
+}
+
+message GetConfigByIdResponse {
+  FactorioConfig configuration = 1;
+}
+
+message GetAllConfigurationsRequest {
+}
+
+message GetAllConfigurationsResponse {
+  repeated FactorioConfig configurations = 1;
+}
+
+message PostConfigurationRequest {
+  FactorioConfig configuration = 1;
+}
+
+message PostConfigurationResponse {
+}
+
+message PutConfigurationRequest {
+  string id = 1;
+  FactorioConfig configuration = 2;
+}
+
+message PutConfigurationResponse {
+}
+
+message DeleteConfigurationRequest {
+  string id = 1;
+}
+
+message DeleteConfigurationResponse {
+}

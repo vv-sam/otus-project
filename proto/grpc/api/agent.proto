@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package api;
+
+option go_package = "github.com/vv-sam/otus-project/proto/grpc/api";
+
+import "task.proto";
+import "metrics.proto";
+
+message AgentInfo {
+  string agent_id = 1;
+  int32 status = 2;
+  repeated Task current_tasks = 3;
+  HostMetrics metrics = 4;
+}
+
+service AgentService {
+  rpc GetById(GetAgentByIdRequest) returns (GetAgentByIdResponse);
+  rpc GetAll(GetAllAgentsRequest) returns (GetAllAgentsResponse);
+  rpc Post(PostAgentRequest) returns (PostAgentResponse);
+  rpc Put(PutAgentRequest) returns (PutAgentResponse);
+  rpc Delete(DeleteAgentRequest) returns (DeleteAgentResponse);
+}
+
+message GetAgentByIdRequest {
+  string id = 1;
+}
+
+message GetAgentByIdResponse {
+  AgentInfo agent = 1;
+}
+
+message GetAllAgentsRequest {
+}
+
+message GetAllAgentsResponse {
+  repeated AgentInfo agents = 1;
+}
+
+message PostAgentRequest {
+  AgentInfo agent = 1;
+}
+
+message PostAgentResponse {
+}
+
+message PutAgentRequest {
+  string id = 1;
+  AgentInfo agent = 2;
+}
+
+message PutAgentResponse {
+}
+
+message DeleteAgentRequest {
+  string id = 1;
+}
+
+message DeleteAgentResponse {
+}

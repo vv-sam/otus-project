@@ -3,11 +3,15 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
+	"net"
 	"net/http"
 	"os"
 
 	httpSwagger "github.com/swaggo/http-swagger/v2"
+	api "github.com/vv-sam/otus-project/proto/grpc/pkg"
 	_ "github.com/vv-sam/otus-project/server/cmd/docs"
+	grpc_services "github.com/vv-sam/otus-project/server/internal/grpc_services"
 	"github.com/vv-sam/otus-project/server/internal/handlers"
 	"github.com/vv-sam/otus-project/server/internal/middleware"
 	"github.com/vv-sam/otus-project/server/internal/model/agent"
@@ -15,6 +19,8 @@ import (
 	"github.com/vv-sam/otus-project/server/internal/model/task"
 	"github.com/vv-sam/otus-project/server/internal/repository"
 	"github.com/vv-sam/otus-project/server/internal/services"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 // @title			Otus-Project
@@ -26,7 +32,7 @@ import (
 // @name Authorization
 func main() {
 	user := flag.String("user", "admin", "admin username")
-	pass := flag.String("password", "", "admin password")
+	pass := flag.String("password", "1234", "admin password")
 	flag.Parse()
 
 	if *pass == "" {
@@ -43,6 +49,8 @@ func main() {
 	ar := repository.NewJsonRepository[*agent.Info]("D:\\otus-data", "agents")
 	cr := repository.NewJsonRepository[*configuration.Factorio]("D:\\otus-data", "configurations")
 	tr := repository.NewJsonRepository[*task.Task]("D:\\otus-data", "tasks")
+
+	go serveGrpc(as, ar, cr, tr)
 
 	ah := handlers.NewAgents(ar, &services.Validator{})
 	ch := handlers.NewConfiguration(cr, &services.Validator{})
@@ -76,4 +84,25 @@ func main() {
 	mux.Handle("DELETE /api/tasks/{id}", am.Authenticate(th.Delete))
 
 	http.ListenAndServe(":8080", mux)
+}
+
+func serveGrpc(as *services.Users, ar *repository.JsonRepository[*agent.Info], cr *repository.JsonRepository[*configuration.Factorio], tr *repository.JsonRepository[*task.Task]) {
+	lis, err := net.Listen("tcp", ":8081")
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+
+	s := grpc.NewServer(
+		grpc.Creds(insecure.NewCredentials()),
+		grpc.UnaryInterceptor(grpc_services.AuthInterceptor),
+	)
+
+	api.RegisterAuthServiceServer(s, grpc_services.NewAuthService(as))
+	api.RegisterAgentServiceServer(s, grpc_services.NewAgentService(ar, &services.Validator{}))
+	api.RegisterConfigurationServiceServer(s, grpc_services.NewConfigurationService(cr, &services.Validator{}))
+	api.RegisterTaskServiceServer(s, grpc_services.NewTaskService(tr, &services.Validator{}))
+
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
 }
