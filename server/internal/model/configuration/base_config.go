@@ -9,16 +9,16 @@ import (
 // Базовые опции, присущие каждой возможной конфигурации
 type baseConfig struct {
 	// уникальный ID конфигурации
-	Id uuid.UUID
+	Id uuid.UUID `json:"id" bson:"id"`
 
 	// ID агента для запуска задачи
-	AgentId uuid.UUID
+	AgentId uuid.UUID `json:"agent_id" bson:"agent_id"`
 
 	// Порт сервера
-	Port uint16 `json:"port"`
+	Port uint16 `json:"port" bson:"port"`
 
 	// Тип конфигурации
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 }
 
 func (c *baseConfig) GetId() uuid.UUID {

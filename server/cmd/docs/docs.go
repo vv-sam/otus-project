@@ -34,7 +34,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/agent.Info"
+                                "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_agent.Info"
                             }
                         }
                     },
@@ -68,7 +68,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/agent.Info"
+                            "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_agent.Info"
                         }
                     }
                 ],
@@ -79,6 +79,36 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/api/agents/history": {
+            "get": {
+                "description": "Get history",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "agents"
+                ],
+                "summary": "Get history",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object"
+                            }
+                        }
                     },
                     "500": {
                         "description": "Internal Server Error",
@@ -113,7 +143,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/agent.Info"
+                            "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_agent.Info"
                         }
                     },
                     "400": {
@@ -161,7 +191,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/agent.Info"
+                            "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_agent.Info"
                         }
                     }
                 ],
@@ -244,7 +274,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/handlers.loginRequest"
+                            "$ref": "#/definitions/server_internal_handlers.loginRequest"
                         }
                     }
                 ],
@@ -252,7 +282,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handlers.loginResponse"
+                            "$ref": "#/definitions/server_internal_handlers.loginResponse"
                         }
                     },
                     "401": {
@@ -285,7 +315,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/configuration.Factorio"
+                                "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.Factorio"
                             }
                         }
                     },
@@ -319,7 +349,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/configuration.Factorio"
+                            "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.Factorio"
                         }
                     }
                 ],
@@ -330,6 +360,36 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/api/configurations/history": {
+            "get": {
+                "description": "Get history",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "configurations"
+                ],
+                "summary": "Get history",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object"
+                            }
+                        }
                     },
                     "500": {
                         "description": "Internal Server Error",
@@ -364,7 +424,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/configuration.Factorio"
+                            "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.Factorio"
                         }
                     },
                     "400": {
@@ -412,7 +472,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/configuration.Factorio"
+                            "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.Factorio"
                         }
                     }
                 ],
@@ -498,7 +558,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/task.Task"
+                                "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_task.Task"
                             }
                         }
                     },
@@ -532,7 +592,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/task.Task"
+                            "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_task.Task"
                         }
                     }
                 ],
@@ -543,6 +603,36 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/api/tasks/history": {
+            "get": {
+                "description": "Get history",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Get history",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object"
+                            }
+                        }
                     },
                     "500": {
                         "description": "Internal Server Error",
@@ -577,7 +667,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/task.Task"
+                            "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_task.Task"
                         }
                     },
                     "400": {
@@ -625,7 +715,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/task.Task"
+                            "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_task.Task"
                         }
                     }
                 ],
@@ -694,14 +784,14 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "agent.Info": {
+        "github_com_vv-sam_otus-project_server_internal_model_agent.Info": {
             "type": "object",
             "properties": {
                 "agent_id": {
                     "type": "string"
                 },
                 "metrics": {
-                    "$ref": "#/definitions/metrics.HostMetrics"
+                    "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_metrics.HostMetrics"
                 },
                 "status": {
                     "type": "integer"
@@ -709,15 +799,15 @@ const docTemplate = `{
                 "tasks": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/task.Task"
+                        "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_task.Task"
                     }
                 }
             }
         },
-        "configuration.Factorio": {
+        "github_com_vv-sam_otus-project_server_internal_model_configuration.Factorio": {
             "type": "object",
             "properties": {
-                "agentId": {
+                "agent_id": {
                     "description": "ID агента для запуска задачи",
                     "type": "string"
                 },
@@ -726,17 +816,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "map_gen_settings": {
-                    "$ref": "#/definitions/configuration.MapGenSettings"
+                    "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.MapGenSettings"
                 },
                 "map_settings": {
-                    "$ref": "#/definitions/configuration.MapSettings"
+                    "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.MapSettings"
                 },
                 "port": {
                     "description": "Порт сервера",
                     "type": "integer"
                 },
                 "server_settings": {
-                    "$ref": "#/definitions/configuration.ServerSetting"
+                    "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.ServerSetting"
                 },
                 "type": {
                     "description": "Тип конфигурации",
@@ -744,17 +834,17 @@ const docTemplate = `{
                 }
             }
         },
-        "configuration.MapGenSettings": {
+        "github_com_vv-sam_otus-project_server_internal_model_configuration.MapGenSettings": {
             "type": "object",
             "properties": {
                 "autoplace_controls": {
                     "type": "object",
                     "additionalProperties": {
-                        "$ref": "#/definitions/configuration.resource"
+                        "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.resource"
                     }
                 },
                 "cliff_settings": {
-                    "$ref": "#/definitions/configuration.cliff"
+                    "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.cliff"
                 },
                 "height": {
                     "type": "integer"
@@ -773,27 +863,27 @@ const docTemplate = `{
                 }
             }
         },
-        "configuration.MapSettings": {
+        "github_com_vv-sam_otus-project_server_internal_model_configuration.MapSettings": {
             "type": "object",
             "properties": {
                 "difficulty_settings": {
-                    "$ref": "#/definitions/configuration.difficulty"
+                    "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.difficulty"
                 },
                 "enemy_evolution": {
-                    "$ref": "#/definitions/configuration.evolution"
+                    "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.evolution"
                 },
                 "enemy_expansion": {
-                    "$ref": "#/definitions/configuration.expansion"
+                    "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.expansion"
                 },
                 "pollution": {
-                    "$ref": "#/definitions/configuration.pollution"
+                    "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.pollution"
                 },
                 "unit_group": {
-                    "$ref": "#/definitions/configuration.unitGroup"
+                    "$ref": "#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.unitGroup"
                 }
             }
         },
-        "configuration.ServerSetting": {
+        "github_com_vv-sam_otus-project_server_internal_model_configuration.ServerSetting": {
             "type": "object",
             "properties": {
                 "afk_autokick_interval": {
@@ -876,7 +966,7 @@ const docTemplate = `{
                 }
             }
         },
-        "configuration.cliff": {
+        "github_com_vv-sam_otus-project_server_internal_model_configuration.cliff": {
             "type": "object",
             "properties": {
                 "cliff_elevation_0": {
@@ -893,7 +983,7 @@ const docTemplate = `{
                 }
             }
         },
-        "configuration.difficulty": {
+        "github_com_vv-sam_otus-project_server_internal_model_configuration.difficulty": {
             "type": "object",
             "properties": {
                 "spoil_time_modifier": {
@@ -904,7 +994,7 @@ const docTemplate = `{
                 }
             }
         },
-        "configuration.evolution": {
+        "github_com_vv-sam_otus-project_server_internal_model_configuration.evolution": {
             "type": "object",
             "properties": {
                 "destroy_factor": {
@@ -921,7 +1011,7 @@ const docTemplate = `{
                 }
             }
         },
-        "configuration.expansion": {
+        "github_com_vv-sam_otus-project_server_internal_model_configuration.expansion": {
             "type": "object",
             "properties": {
                 "building_coefficient": {
@@ -965,7 +1055,7 @@ const docTemplate = `{
                 }
             }
         },
-        "configuration.pollution": {
+        "github_com_vv-sam_otus-project_server_internal_model_configuration.pollution": {
             "type": "object",
             "properties": {
                 "ageing": {
@@ -1006,7 +1096,7 @@ const docTemplate = `{
                 }
             }
         },
-        "configuration.resource": {
+        "github_com_vv-sam_otus-project_server_internal_model_configuration.resource": {
             "type": "object",
             "properties": {
                 "frequency": {
@@ -1020,7 +1110,7 @@ const docTemplate = `{
                 }
             }
         },
-        "configuration.unitGroup": {
+        "github_com_vv-sam_otus-project_server_internal_model_configuration.unitGroup": {
             "type": "object",
             "properties": {
                 "max_gathering_unit_groups": {
@@ -1064,26 +1154,7 @@ const docTemplate = `{
                 }
             }
         },
-        "handlers.loginRequest": {
-            "type": "object",
-            "properties": {
-                "password": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "handlers.loginResponse": {
-            "type": "object",
-            "properties": {
-                "token": {
-                    "type": "string"
-                }
-            }
-        },
-        "metrics.HostMetrics": {
+        "github_com_vv-sam_otus-project_server_internal_model_metrics.HostMetrics": {
             "type": "object",
             "properties": {
                 "cpu_usage": {
@@ -1097,7 +1168,7 @@ const docTemplate = `{
                 }
             }
         },
-        "task.Task": {
+        "github_com_vv-sam_otus-project_server_internal_model_task.Task": {
             "type": "object",
             "properties": {
                 "id": {
@@ -1110,6 +1181,25 @@ const docTemplate = `{
                 },
                 "type": {
                     "description": "Тип задачи",
+                    "type": "string"
+                }
+            }
+        },
+        "server_internal_handlers.loginRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "server_internal_handlers.loginResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
                     "type": "string"
                 }
             }

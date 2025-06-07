@@ -8,6 +8,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/vv-sam/otus-project/server/internal/model/configuration"
+	"github.com/vv-sam/otus-project/server/internal/model/history"
 	"github.com/vv-sam/otus-project/server/internal/repository"
 	"github.com/vv-sam/otus-project/server/internal/services"
 )
@@ -18,6 +19,7 @@ type configurationRepository interface {
 	Add(configuration *configuration.Factorio) error
 	Update(id uuid.UUID, configuration *configuration.Factorio) error
 	Delete(id uuid.UUID) error
+	GetHistory() ([]history.Log[*configuration.Factorio], error)
 }
 
 type Configuration struct {
@@ -216,4 +218,29 @@ func (c *Configuration) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+}
+
+// @Summary Get history
+// @Description Get history
+// @Tags configurations
+// @Accept json
+// @Produce json
+// @Success 200 {array} object
+// @Failure 500 {object} error
+// @Router /api/configurations/history [get]
+func (c *Configuration) GetHistory(w http.ResponseWriter, r *http.Request) {
+	history, err := c.r.GetHistory()
+	if err != nil {
+		http.Error(w, fmt.Errorf("failed to get history: %w", err).Error(), http.StatusInternalServerError)
+		return
+	}
+
+	data, err := json.Marshal(history)
+	if err != nil {
+		http.Error(w, fmt.Errorf("failed to marshal history: %w", err).Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }

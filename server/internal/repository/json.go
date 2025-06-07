@@ -2,7 +2,6 @@ package repository
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -10,15 +9,8 @@ import (
 	"sync"
 
 	"github.com/google/uuid"
+	"github.com/vv-sam/otus-project/server/internal/model/history"
 )
-
-var (
-	ErrNotFound = errors.New("item not found")
-)
-
-type uniqueObject interface {
-	GetId() uuid.UUID
-}
 
 type JsonRepository[T uniqueObject] struct {
 	m     sync.RWMutex
@@ -101,6 +93,10 @@ func (r *JsonRepository[T]) Delete(id uuid.UUID) error {
 	}
 
 	return ErrNotFound
+}
+
+func (r *JsonRepository[T]) GetHistory() ([]history.Log[T], error) {
+	return nil, fmt.Errorf("not implemented for this repository")
 }
 
 func (r *JsonRepository[T]) loadRepository() error {
