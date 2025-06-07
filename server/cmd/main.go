@@ -5,13 +5,16 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
 
 	"github.com/redis/go-redis/v9"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
+	api "github.com/vv-sam/otus-project/proto/grpc/pkg"
 	_ "github.com/vv-sam/otus-project/server/cmd/docs"
+	grpc_services "github.com/vv-sam/otus-project/server/internal/grpc_services"
 	"github.com/vv-sam/otus-project/server/internal/handlers"
 	"github.com/vv-sam/otus-project/server/internal/middleware"
 	"github.com/vv-sam/otus-project/server/internal/model/agent"
@@ -21,6 +24,8 @@ import (
 	"github.com/vv-sam/otus-project/server/internal/services"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 // @title			Otus-Project
@@ -100,6 +105,8 @@ func main() {
 		log.Fatalf("failed to create task repository: %v", err)
 	}
 
+	go serveGrpc(as, ar, cr, tr)
+
 	ah := handlers.NewAgents(ar, &services.Validator{})
 	ch := handlers.NewConfiguration(cr, &services.Validator{})
 	th := handlers.NewTasks(tr, &services.Validator{})
@@ -135,4 +142,25 @@ func main() {
 	mux.HandleFunc("GET /api/tasks/history", th.GetHistory)
 
 	http.ListenAndServe(":8080", mux)
+}
+
+func serveGrpc(as *services.Users, ar *repository.JsonRepository[*agent.Info], cr *repository.JsonRepository[*configuration.Factorio], tr *repository.JsonRepository[*task.Task]) {
+	lis, err := net.Listen("tcp", ":8081")
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+
+	s := grpc.NewServer(
+		grpc.Creds(insecure.NewCredentials()),
+		grpc.UnaryInterceptor(grpc_services.AuthInterceptor),
+	)
+
+	api.RegisterAuthServiceServer(s, grpc_services.NewAuthService(as))
+	api.RegisterAgentServiceServer(s, grpc_services.NewAgentService(ar, &services.Validator{}))
+	api.RegisterConfigurationServiceServer(s, grpc_services.NewConfigurationService(cr, &services.Validator{}))
+	api.RegisterTaskServiceServer(s, grpc_services.NewTaskService(tr, &services.Validator{}))
+
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
 }

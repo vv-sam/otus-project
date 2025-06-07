@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package api;
+
+option go_package = "github.com/vv-sam/otus-project/proto/grpc/api";
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string token = 1;
+}
+
+service AuthService {
+  rpc Login(LoginRequest) returns (LoginResponse);
+}
