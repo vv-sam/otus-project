@@ -144,7 +144,7 @@ func main() {
 	http.ListenAndServe(":8080", mux)
 }
 
-func serveGrpc(as *services.Users, ar *repository.JsonRepository[*agent.Info], cr *repository.JsonRepository[*configuration.Factorio], tr *repository.JsonRepository[*task.Task]) {
+func serveGrpc(as *services.Users, ar *repository.NosqlRepository[*agent.Info], cr *repository.NosqlRepository[*configuration.Factorio], tr *repository.NosqlRepository[*task.Task]) {
 	lis, err := net.Listen("tcp", ":8081")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
