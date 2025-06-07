@@ -9,10 +9,10 @@ import (
 )
 
 type Info struct {
-	AgentId      uuid.UUID           `json:"agent_id"`
-	Status       int16               `json:"status"`
-	CurrentTasks []task.Task         `json:"tasks"`
-	Metrics      metrics.HostMetrics `json:"metrics"`
+	AgentId      uuid.UUID           `json:"agent_id" bson:"agent_id"`
+	Status       int16               `json:"status" bson:"status"`
+	CurrentTasks []task.Task         `json:"tasks" bson:"tasks"`
+	Metrics      metrics.HostMetrics `json:"metrics" bson:"metrics"`
 }
 
 // Вернём строку с id агента и id статуса

@@ -1,46 +1,46 @@
 definitions:
-  agent.Info:
+  github_com_vv-sam_otus-project_server_internal_model_agent.Info:
     properties:
       agent_id:
         type: string
       metrics:
-        $ref: '#/definitions/metrics.HostMetrics'
+        $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_metrics.HostMetrics'
       status:
         type: integer
       tasks:
         items:
-          $ref: '#/definitions/task.Task'
+          $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_task.Task'
         type: array
     type: object
-  configuration.Factorio:
+  github_com_vv-sam_otus-project_server_internal_model_configuration.Factorio:
     properties:
-      agentId:
+      agent_id:
         description: ID агента для запуска задачи
         type: string
       id:
         description: уникальный ID конфигурации
         type: string
       map_gen_settings:
-        $ref: '#/definitions/configuration.MapGenSettings'
+        $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.MapGenSettings'
       map_settings:
-        $ref: '#/definitions/configuration.MapSettings'
+        $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.MapSettings'
       port:
         description: Порт сервера
         type: integer
       server_settings:
-        $ref: '#/definitions/configuration.ServerSetting'
+        $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.ServerSetting'
       type:
         description: Тип конфигурации
         type: string
     type: object
-  configuration.MapGenSettings:
+  github_com_vv-sam_otus-project_server_internal_model_configuration.MapGenSettings:
     properties:
       autoplace_controls:
         additionalProperties:
-          $ref: '#/definitions/configuration.resource'
+          $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.resource'
         type: object
       cliff_settings:
-        $ref: '#/definitions/configuration.cliff'
+        $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.cliff'
       height:
         type: integer
       peaceful_mode:
@@ -52,20 +52,20 @@ definitions:
       width:
         type: integer
     type: object
-  configuration.MapSettings:
+  github_com_vv-sam_otus-project_server_internal_model_configuration.MapSettings:
     properties:
       difficulty_settings:
-        $ref: '#/definitions/configuration.difficulty'
+        $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.difficulty'
       enemy_evolution:
-        $ref: '#/definitions/configuration.evolution'
+        $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.evolution'
       enemy_expansion:
-        $ref: '#/definitions/configuration.expansion'
+        $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.expansion'
       pollution:
-        $ref: '#/definitions/configuration.pollution'
+        $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.pollution'
       unit_group:
-        $ref: '#/definitions/configuration.unitGroup'
+        $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.unitGroup'
     type: object
-  configuration.ServerSetting:
+  github_com_vv-sam_otus-project_server_internal_model_configuration.ServerSetting:
     properties:
       afk_autokick_interval:
         type: integer
@@ -120,7 +120,7 @@ definitions:
       username:
         type: string
     type: object
-  configuration.cliff:
+  github_com_vv-sam_otus-project_server_internal_model_configuration.cliff:
     properties:
       cliff_elevation_0:
         type: integer
@@ -131,14 +131,14 @@ definitions:
       richness:
         type: integer
     type: object
-  configuration.difficulty:
+  github_com_vv-sam_otus-project_server_internal_model_configuration.difficulty:
     properties:
       spoil_time_modifier:
         type: number
       technology_price_multiplier:
         type: number
     type: object
-  configuration.evolution:
+  github_com_vv-sam_otus-project_server_internal_model_configuration.evolution:
     properties:
       destroy_factor:
         type: number
@@ -149,7 +149,7 @@ definitions:
       time_factor:
         type: number
     type: object
-  configuration.expansion:
+  github_com_vv-sam_otus-project_server_internal_model_configuration.expansion:
     properties:
       building_coefficient:
         type: number
@@ -178,7 +178,7 @@ definitions:
       settler_group_min_size:
         type: integer
     type: object
-  configuration.pollution:
+  github_com_vv-sam_otus-project_server_internal_model_configuration.pollution:
     properties:
       ageing:
         type: integer
@@ -205,7 +205,7 @@ definitions:
       pollution_with_max_forest_damage:
         type: integer
     type: object
-  configuration.resource:
+  github_com_vv-sam_otus-project_server_internal_model_configuration.resource:
     properties:
       frequency:
         type: number
@@ -214,7 +214,7 @@ definitions:
       size:
         type: number
     type: object
-  configuration.unitGroup:
+  github_com_vv-sam_otus-project_server_internal_model_configuration.unitGroup:
     properties:
       max_gathering_unit_groups:
         type: integer
@@ -243,19 +243,7 @@ definitions:
       tick_tolerance_when_member_arrives:
         type: integer
     type: object
-  handlers.loginRequest:
-    properties:
-      password:
-        type: string
-      username:
-        type: string
-    type: object
-  handlers.loginResponse:
-    properties:
-      token:
-        type: string
-    type: object
-  metrics.HostMetrics:
+  github_com_vv-sam_otus-project_server_internal_model_metrics.HostMetrics:
     properties:
       cpu_usage:
         type: number
@@ -264,7 +252,7 @@ definitions:
       ram_total:
         type: integer
     type: object
-  task.Task:
+  github_com_vv-sam_otus-project_server_internal_model_task.Task:
     properties:
       id:
         description: ID задачи
@@ -274,6 +262,18 @@ definitions:
         type: integer
       type:
         description: Тип задачи
+        type: string
+    type: object
+  server_internal_handlers.loginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  server_internal_handlers.loginResponse:
+    properties:
+      token:
         type: string
     type: object
 host: localhost:8080
@@ -295,7 +295,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/agent.Info'
+              $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_agent.Info'
             type: array
         "500":
           description: Internal Server Error
@@ -313,7 +313,7 @@ paths:
         name: agent
         required: true
         schema:
-          $ref: '#/definitions/agent.Info'
+          $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_agent.Info'
       produces:
       - application/json
       responses:
@@ -373,7 +373,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/agent.Info'
+            $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_agent.Info'
         "400":
           description: Bad Request
           schema: {}
@@ -401,7 +401,7 @@ paths:
         name: agent
         required: true
         schema:
-          $ref: '#/definitions/agent.Info'
+          $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_agent.Info'
       produces:
       - application/json
       responses:
@@ -421,6 +421,26 @@ paths:
       summary: Update an agent
       tags:
       - agents
+  /api/agents/history:
+    get:
+      consumes:
+      - application/json
+      description: Get history
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: object
+            type: array
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get history
+      tags:
+      - agents
   /api/auth/login:
     post:
       consumes:
@@ -432,14 +452,14 @@ paths:
         name: loginRequest
         required: true
         schema:
-          $ref: '#/definitions/handlers.loginRequest'
+          $ref: '#/definitions/server_internal_handlers.loginRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handlers.loginResponse'
+            $ref: '#/definitions/server_internal_handlers.loginResponse'
         "401":
           description: Unauthorized
           schema: {}
@@ -461,7 +481,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/configuration.Factorio'
+              $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.Factorio'
             type: array
         "500":
           description: Internal Server Error
@@ -479,7 +499,7 @@ paths:
         name: configuration
         required: true
         schema:
-          $ref: '#/definitions/configuration.Factorio'
+          $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.Factorio'
       produces:
       - application/json
       responses:
@@ -542,7 +562,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/configuration.Factorio'
+            $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.Factorio'
         "400":
           description: Bad Request
           schema: {}
@@ -570,7 +590,7 @@ paths:
         name: configuration
         required: true
         schema:
-          $ref: '#/definitions/configuration.Factorio'
+          $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_configuration.Factorio'
       produces:
       - application/json
       responses:
@@ -590,6 +610,26 @@ paths:
       summary: Update a configuration
       tags:
       - configurations
+  /api/configurations/history:
+    get:
+      consumes:
+      - application/json
+      description: Get history
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: object
+            type: array
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get history
+      tags:
+      - configurations
   /api/tasks:
     get:
       consumes:
@@ -602,7 +642,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/task.Task'
+              $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_task.Task'
             type: array
         "500":
           description: Internal Server Error
@@ -620,7 +660,7 @@ paths:
         name: task
         required: true
         schema:
-          $ref: '#/definitions/task.Task'
+          $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_task.Task'
       produces:
       - application/json
       responses:
@@ -683,7 +723,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/task.Task'
+            $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_task.Task'
         "400":
           description: Bad Request
           schema: {}
@@ -711,7 +751,7 @@ paths:
         name: task
         required: true
         schema:
-          $ref: '#/definitions/task.Task'
+          $ref: '#/definitions/github_com_vv-sam_otus-project_server_internal_model_task.Task'
       produces:
       - application/json
       responses:
@@ -729,6 +769,26 @@ paths:
       security:
       - BearerAuth: []
       summary: Update a task
+      tags:
+      - tasks
+  /api/tasks/history:
+    get:
+      consumes:
+      - application/json
+      description: Get history
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: object
+            type: array
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get history
       tags:
       - tasks
 securityDefinitions:

@@ -15,13 +15,13 @@ const (
 
 type Task struct {
 	// ID задачи
-	Id uuid.UUID `json:"id"`
+	Id uuid.UUID `json:"id" bson:"id"`
 
 	// Статус задачи
-	Status int16 `json:"status"`
+	Status int16 `json:"status" bson:"status"`
 
 	// Тип задачи
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 }
 
 func (t Task) String() string {
