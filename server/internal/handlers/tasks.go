@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	"github.com/vv-sam/otus-project/server/internal/model/history"
 	"github.com/vv-sam/otus-project/server/internal/model/task"
 	"github.com/vv-sam/otus-project/server/internal/repository"
 	"github.com/vv-sam/otus-project/server/internal/services"
@@ -18,6 +19,7 @@ type tasksRepository interface {
 	Add(task *task.Task) error
 	Update(id uuid.UUID, task *task.Task) error
 	Delete(id uuid.UUID) error
+	GetHistory() ([]history.Log[*task.Task], error)
 }
 
 type Tasks struct {
@@ -216,4 +218,29 @@ func (t *Tasks) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+}
+
+// @Summary Get history
+// @Description Get history
+// @Tags tasks
+// @Accept json
+// @Produce json
+// @Success 200 {array} object
+// @Failure 500 {object} error
+// @Router /api/tasks/history [get]
+func (t *Tasks) GetHistory(w http.ResponseWriter, r *http.Request) {
+	history, err := t.r.GetHistory()
+	if err != nil {
+		http.Error(w, fmt.Errorf("failed to get history: %w", err).Error(), http.StatusInternalServerError)
+		return
+	}
+
+	data, err := json.Marshal(history)
+	if err != nil {
+		http.Error(w, fmt.Errorf("failed to marshal history: %w", err).Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
